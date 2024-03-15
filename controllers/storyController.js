@@ -35,7 +35,8 @@ exports.new = (req,res)=>{
 exports.create = (req,res)=>{
     //  res.send("stories created")
     let story = req.body;
-    model.save(story);
+    let image =  "/images/" + req.file.filename;
+    model.save(story, image);
     res.redirect('/stories/')
 };
 
@@ -80,7 +81,13 @@ exports.update = (req,res,next)=>{
     // res.send("update the existing story")
     let id =req.params.id;
     let story = req.body;
-    if(model.update(id,story)){
+    if (req.file) {
+        updatedStory_image = "/images/" + req.file.filename; 
+    } else {
+        updatedStory_image = req.body.currentimage; 
+    }
+    console.log("imagesss");
+    if(model.update(id,story, updatedStory_image)){
         res.redirect('/stories/'+id)
     }
     else{

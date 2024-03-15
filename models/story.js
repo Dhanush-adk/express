@@ -14,7 +14,7 @@ const stories = [
         startTime:'05:15',
         enddate:'2020-08-13',
         endTime:'06:15', 
-        image:'digital_innovation.png',
+        image:'/images/digital_innovation.png',
         content:"The Green Innovation Conference showcases advanced eco-friendly technologies and fosters collaboration for a sustainable future.",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
     },
@@ -28,7 +28,7 @@ const stories = [
         startTime:'05:17',
         enddate:'2020-08-13',
         endTime:'06:17', 
-        image:'recycling_digital.png',
+        image:'/images/recycling_digital.png',
         content:"The Digital Recycling Symposium brings together leaders to tackle electronic waste challenges and drive innovation for sustainable technology disposal and recycling.",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
     },
@@ -42,7 +42,7 @@ const stories = [
         enddate:'2020-08-13',
         startTime:'05:19',
         endTime:'06:19', 
-        image:'sus_living.png',
+        image:'/images/sus_living.png',
         content:"The Sustainable Living Forum gathers experts and enthusiasts to share eco-friendly practices and innovative solutions, inspiring collective action for environmental conservation and promoting sustainable lifestyles.",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
     },
@@ -56,7 +56,7 @@ const stories = [
         startTime:'05:20',
         enddate:'2020-08-13',
         endTime:'06:20', 
-        image:'ecofriendly.png',
+        image:'/images/ecofriendly.png',
         content:"The Eco-Friendly Product Fair features a range of sustainable offerings from diverse companies, promoting green alternatives and responsible consumption while supporting businesses committed to sustainability.",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
     
@@ -71,7 +71,7 @@ const stories = [
         startTime:'05:21',
         enddate:'2020-08-13',
         endTime:'23:21', 
-        image:'green_tech.png',
+        image:'/images/green_tech.png',
         content:"The Green Tech Hackathon fosters collaboration among participants to create innovative technology solutions tackling environmental challenges, promoting sustainability and creativity in a competitive atmosphere..",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
 
@@ -86,7 +86,7 @@ const stories = [
         startTime:'05:22',
         enddate:'2020-08-13',
         endTime:'06:22', 
-        image:'recycle.png',
+        image:'/images/recycle.png',
         content:"The Digital Recycling Challenge promotes inventive approaches to repurpose electronic waste, fostering sustainability and responsible disposal practices in technology consumption.",
         created: DateTime.now().toLocaleString(DateTime.DATETIME_SHORT)
     }
@@ -96,7 +96,7 @@ exports.find = () => stories;
 exports.categories = () => categories;
 
 exports.findById = id => stories.find(story => story.id === id)
-exports.save = function(story){
+exports.save = function(story, image){
     story.id = uuidv4();
     story.created = DateTime.now().toLocaleString(DateTime.DATETIME_SHORT);
 
@@ -104,24 +104,27 @@ exports.save = function(story){
     story.startTime = DateTime.fromISO(story.startTime).toFormat('HH:mm'); 
     story.enddate = DateTime.fromISO(story.endTime).toFormat('yyyy-MM-dd'); 
     story.endTime = DateTime.fromISO(story.endTime).toFormat('HH:mm'); 
-
+    story.image = image;
     stories.push(story);
     if(categories.indexOf(story.category) === -1){
         categories.push(story.category);
     }
 }
-exports.update = function(id,newStory){
+exports.update = function(id,newStory, image){
     let story = stories.find(story => story.id === id)
     if(story){
         story.title = newStory.title;
         story.content = newStory.content;
         story.host = newStory.host;
         story.location = newStory.location;
-        story.date = newStory.date;
-        story.startTime = newStory.startTime;
-        story.endTime = newStory.endTime;
+        story.date = DateTime.fromISO(newStory.startTime).toFormat('yyyy-MM-dd'); 
+        story.startTime = DateTime.fromISO(newStory.startTime).toFormat('HH:mm'); 
+        story.enddate = DateTime.fromISO(newStory.endTime).toFormat('yyyy-MM-dd'); 
+        story.endTime = DateTime.fromISO(newStory.endTime).toFormat('HH:mm'); 
         story.category = newStory.category;
-
+        if (image) {
+            story.image = image;
+        }
         if(categories.indexOf(newStory.category) === -1){
             categories.push(newStory.category);
         }
@@ -135,7 +138,7 @@ exports.update = function(id,newStory){
             }
         }); 
         
-
+        console.log(story);
         return true;
     }
     else{

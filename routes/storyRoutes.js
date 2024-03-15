@@ -1,5 +1,6 @@
 const express = require("express");
 const controller = require('../controllers/storyController')
+const {fileUpload} = require('../middleware/fileUpload.js');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get('/',controller.index)
 router.get('/newEvents',controller.new)
 
 // post /stories
-router.post('/',controller.create)
+router.post('/',fileUpload,controller.create)
 
 //get /stories/id get stories by id
 router.get('/:id',controller.show)
@@ -19,7 +20,7 @@ router.get('/:id',controller.show)
 router.get('/:id/edit',controller.edit)
 
 //update /stories/:id/edit update story identified by id
-router.put('/:id',controller.update)
+router.put('/:id',fileUpload,controller.update)
 
 //delete /stories/:id delete existing story by id
 router.delete('/:id',controller.delete)
